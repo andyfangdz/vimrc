@@ -1,4 +1,30 @@
-execute pathogen#infect()
+
+if &compatible
+  set nocompatible
+endif
+set runtimepath+=~/.config/nvim/repos/github.com/Shougo/dein.vim
+
+if dein#load_state('~/.config/nvim')
+  call dein#begin('~/.config/nvim')
+  call dein#add('~/.config/nvim')
+  call dein#add('Shougo/neocomplete.vim')
+  call dein#add('scrooloose/nerdtree')
+  call dein#add('Shougo/deoplete.nvim')
+  call dein#add('mbbill/undotree')
+  call dein#add('tpope/vim-fugitive')
+  call dein#add('vim-airline/vim-airline')
+  call dein#add('jistr/vim-nerdtree-tabs')
+  call dein#add('yuttie/comfortable-motion.vim')
+  call dein#add('ntpeters/vim-better-whitespace')
+  call dein#add('rhysd/vim-clang-format')
+
+  call dein#end()
+  call dein#save_state()
+endif
+
+filetype plugin indent on
+syntax enable
+
 "Credit joshdick
 "Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
 "If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
@@ -21,16 +47,18 @@ let g:python3_host_prog = '/Users/andy/.pyenv/versions/neovim3/bin/python'
 
 filetype on
 syntax on
-
-colorscheme one
 set background=dark
+let g:one_allow_italics = 1 " I love italic for comments
+colorscheme one
+
 
 set colorcolumn=90
 set number
 
 
 let mapleader=" "
-map <leader>s :source ~/.config/nvim/init.vim<CR>
+" map <leader>s :source ~/.config/nvim/init.vim<CR>
+nnoremap <Leader>di :call dein#install()<Enter>
 
 set hidden
 set history=100
@@ -62,13 +90,12 @@ autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
-nnoremap <Leader>f :NERDTreeToggle<Enter>
 nnoremap <silent> <Leader>v :NERDTreeFind<CR>
 let NERDTreeQuitOnOpen = 1
 
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 let NERDTreeAutoDeleteBuffer = 1
-let NERDTreeMinimalUI = 1
+" let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 let NERDTreeShowHidden=1
 nmap <leader>n :NERDTreeToggle<CR>
@@ -77,3 +104,26 @@ set mouse=a
 noremap <silent> <ScrollWheelDown> :call comfortable_motion#flick(40)<CR>
 noremap <silent> <ScrollWheelUp>   :call comfortable_motion#flick(-40)<CR>
 set clipboard=unnamed
+
+nnoremap <Leader>u :UndotreeToggle<Enter>
+
+if has("persistent_undo")
+    set undodir=~/.undodir/
+    set undofile
+endif
+
+
+let g:airline_theme='one'
+highlight Comment cterm=italic
+
+let g:clang_format#style_options = {
+            \ "AccessModifierOffset" : -4,
+            \ "AllowShortIfStatementsOnASingleLine" : "true",
+            \ "AlwaysBreakTemplateDeclarations" : "true",
+            \ "Standard" : "C++11"}
+autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+nmap <Leader>C :ClangFormatAutoToggle<CR>
+
+let NERDTreeQuitOnOpen=0
+autocmd CursorHold,CursorHoldI * call NERDTreeFocus() | call g:NERDTree.ForCurrentTab().getRoot().refresh() | call g:NERDTree.ForCurrentTab().render() | wincmd w
