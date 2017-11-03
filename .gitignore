@@ -1,3 +1,6 @@
+cache_nvim
+state_nvim.vim
+
 repos/
 .cache/
 # Created by https://www.gitignore.io/api/vim,macos
