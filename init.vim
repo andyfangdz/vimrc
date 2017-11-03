@@ -13,11 +13,14 @@ if dein#load_state('~/.config/nvim')
   call dein#add('mbbill/undotree')
   call dein#add('tpope/vim-fugitive')
   call dein#add('vim-airline/vim-airline')
+  call dein#add('vim-airline/vim-airline-themes')
   call dein#add('jistr/vim-nerdtree-tabs')
   call dein#add('yuttie/comfortable-motion.vim')
   call dein#add('ntpeters/vim-better-whitespace')
   call dein#add('rhysd/vim-clang-format')
-
+  call dein#add('mileszs/ack.vim')
+  call dein#add('/usr/local/opt/fzf')
+  call dein#add('junegunn/fzf.vim')
   call dein#end()
   call dein#save_state()
 endif
@@ -91,7 +94,7 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 nnoremap <silent> <Leader>v :NERDTreeFind<CR>
-let NERDTreeQuitOnOpen = 1
+let NERDTreeQitOnOpen = 1
 
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 let NERDTreeAutoDeleteBuffer = 1
@@ -113,7 +116,8 @@ if has("persistent_undo")
 endif
 
 
-let g:airline_theme='one'
+let g:airline_theme='onedark'
+let g:airline#extensions#tabline#enabled = 1
 highlight Comment cterm=italic
 
 let g:clang_format#style_options = {
@@ -127,3 +131,7 @@ nmap <Leader>C :ClangFormatAutoToggle<CR>
 
 let NERDTreeQuitOnOpen=0
 autocmd CursorHold,CursorHoldI * call NERDTreeFocus() | call g:NERDTree.ForCurrentTab().getRoot().refresh() | call g:NERDTree.ForCurrentTab().render() | wincmd w
+
+nmap ; :Buffers<CR>
+nmap <Leader>f :Files<CR>
+nmap <Leader>t :Tags<CR>
